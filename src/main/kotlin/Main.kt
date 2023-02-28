@@ -16,10 +16,9 @@ fun checkStrongMatch(rndNum: Int, userNum: Int): Int {
         round++
     }while(usr >= 1)
 
-
-
     return matches;
 }
+
 fun firstDigit(n: Int): Int{
     var ret = n;
     while(ret > 10){      //gets the first digit of a number
@@ -28,6 +27,7 @@ fun firstDigit(n: Int): Int{
     return ret;
 }
 fun checkWeakMatch(): Int {
+
     return 0;
 }
 
