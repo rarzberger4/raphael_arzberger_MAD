@@ -5,12 +5,12 @@ fun checkMatches(rndNum: Int, userNum: Int): Boolean{
     var softMatch = 0
     var round = 1
 
-    var digitsRnd = mutableListOf<Int>()    //lists the digits of a number
-    var digitsUsr = mutableListOf<Int>()
+    val digitsRnd = mutableListOf<Int>()    //lists the digits of a number
+    val digitsUsr = mutableListOf<Int>()
 
     do{     // get every digit of both numbers, add them to the lists and check for hardMatches
-        var fDigRnd = firstDigit(rnd)
-        var fDigUsr = firstDigit(usr)
+        val fDigRnd = firstDigit(rnd)
+        val fDigUsr = firstDigit(usr)
         if(fDigUsr == fDigRnd){
             hardMatch++
         }
@@ -26,7 +26,7 @@ fun checkMatches(rndNum: Int, userNum: Int): Boolean{
 
 
             //check digit lists for softMatches
-    var found = mutableListOf<Int>()
+    val found = mutableListOf<Int>()
 
     digitsRnd.forEach{
         for (i in digitsUsr) {
@@ -39,15 +39,15 @@ fun checkMatches(rndNum: Int, userNum: Int): Boolean{
         }
     }
 
-    println("$softMatch:$hardMatch");
+    println("$softMatch:$hardMatch")
     return (softMatch + hardMatch) == 8
 }
 fun firstDigit(n: Int): Int{
-    var ret = n;
+    var ret = n
     while(ret > 10){      //gets the first digit of a number
-        ret /= 10;
+        ret /= 10
     }
-    return ret;
+    return ret
 }
 fun pow(num: Int, exp: Int): Int{
     var expo = exp
@@ -88,9 +88,9 @@ fun main(args: Array<String>) {
     println("Program arguments: ${args.joinToString()}")
 
 
-    var num = 0
+    var num: Int
     do {
-        var rnd = (0..9).shuffled().take(4).joinToString("")
+        val rnd = (0..9).shuffled().take(4).joinToString("")
         num = rnd.toInt()
     } while (num < 1000)
 
@@ -105,7 +105,7 @@ fun main(args: Array<String>) {
                 println("No Input!")
             }
         }while(userNum < 1000)
-    }while (!checkMatches(num as Int, userNum as Int))
+    }while (!checkMatches(num, userNum))
 
     println("You Won!")
     celebrate()
