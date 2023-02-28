@@ -1,15 +1,14 @@
-import kotlin.random.Random
-fun checkStrongMatch(rndNum: Int, userNum: Int): Int {
+fun checkMatches(rndNum: Int, userNum: Int){
     var rnd = rndNum
     var usr = userNum
     var hardMatch = 0
     var softMatch = 0
     var round = 1
 
-    var digitsRnd = mutableListOf<Int>()
+    var digitsRnd = mutableListOf<Int>()    //lists the digits of a number
     var digitsUsr = mutableListOf<Int>()
 
-    do{
+    do{     // get every digit of both numbers, add them to the lists and check for hardMatches
         var fDigRnd = firstDigit(rnd)
         var fDigUsr = firstDigit(usr)
         if(fDigUsr == fDigRnd){
@@ -26,7 +25,7 @@ fun checkStrongMatch(rndNum: Int, userNum: Int): Int {
     }while(usr >= 1)
 
 
-
+            //check digit lists for softMatches --> only works because the number to guess is not containing repeating digits
     digitsRnd.forEach{
         for (i in digitsUsr) {
             if (i == it){
@@ -36,9 +35,7 @@ fun checkStrongMatch(rndNum: Int, userNum: Int): Int {
     }
 
     println("Hardmatches: $hardMatch ____ Softmatches: $softMatch")
-    return 0
 }
-
 fun firstDigit(n: Int): Int{
     var ret = n;
     while(ret > 10){      //gets the first digit of a number
@@ -46,11 +43,6 @@ fun firstDigit(n: Int): Int{
     }
     return ret;
 }
-fun checkWeakMatch(): Int {
-
-    return 0;
-}
-
 fun pow(num: Int, exp: Int): Int{
     var expo = exp
     var result: Long = 1
@@ -77,16 +69,11 @@ fun main(args: Array<String>) {
     } while (num < 1000)
 
     num = 1234
-    println("Guess a number: ")
+    println("Guess the number: ")
     var userNum = readln().toInt()
 
 
 
-    var result = checkStrongMatch(num as Int, userNum as Int)
-
-    println("$num---$userNum --> $result")
-
-
-
+    checkMatches(num as Int, userNum as Int)
 
 }
