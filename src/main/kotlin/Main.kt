@@ -94,7 +94,7 @@ fun main(args: Array<String>) {
         num = rnd.toInt()
     } while (num < 1000)
 
-    println("random number: $num")
+    //println("random number: $num")
     do{
         var userNum = 0
         do {
