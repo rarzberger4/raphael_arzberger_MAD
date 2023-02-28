@@ -1,4 +1,4 @@
-fun checkMatches(rndNum: Int, userNum: Int){
+fun checkMatches(rndNum: Int, userNum: Int): Boolean{
     var rnd = rndNum
     var usr = userNum
     var hardMatch = 0
@@ -25,16 +25,22 @@ fun checkMatches(rndNum: Int, userNum: Int){
     }while(usr >= 1)
 
 
-            //check digit lists for softMatches --> only works because the number to guess is not containing repeating digits
+            //check digit lists for softMatches
+    var found = mutableListOf<Int>()
+
     digitsRnd.forEach{
         for (i in digitsUsr) {
             if (i == it){
-                softMatch++
+                if(!found.contains(i)){
+                    found.add(i)
+                    softMatch++
+                }
             }
         }
     }
 
-    println("Hardmatches: $hardMatch ____ Softmatches: $softMatch")
+    println("$softMatch:$hardMatch");
+    return (softMatch + hardMatch) == 8
 }
 fun firstDigit(n: Int): Int{
     var ret = n;
@@ -52,7 +58,27 @@ fun pow(num: Int, exp: Int): Int{
     }
     return result.toInt()
 }
-
+fun celebrate(){
+        println("**************************************")
+        println("*                                    *")
+        println("*           CONGRATULATIONS!         *")
+        println("*                                    *")
+        println("*         ___________                *")
+        println("*        '._==_==_=_.'               *")
+        println("*        .-\\:      /-.               *")
+        println("*       | (|:.     |) |              *")
+        println("*        '-|:.     |-'               *")
+        println("*          \\::.    /                 *")
+        println("*           '::. .'                  *")
+        println("*             ) (                    *")
+        println("*           _.' '._                  *")
+        println("*          '-------'                 *")
+        println("*                                    *")
+        println("*      You have completed the game!  *")
+        println("*      Thank you for playing!        *")
+        println("*                                    *")
+        println("**************************************")
+}
 
 fun main(args: Array<String>) {
     println("Hello World!")
@@ -68,12 +94,20 @@ fun main(args: Array<String>) {
         num = rnd.toInt()
     } while (num < 1000)
 
-    num = 1234
-    println("Guess the number: ")
-    var userNum = readln().toInt()
+    println("random number: $num")
+    do{
+        var userNum = 0
+        do {
+            println("Guess the 4 digit number: ")
+            try{
+                userNum = readln().toInt()
+            }catch(e: Exception){
+                println("No Input!")
+            }
+        }while(userNum < 1000)
+    }while (!checkMatches(num as Int, userNum as Int))
 
-
-
-    checkMatches(num as Int, userNum as Int)
+    println("You Won!")
+    celebrate()
 
 }
