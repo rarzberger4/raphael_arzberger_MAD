@@ -2,13 +2,22 @@ import kotlin.random.Random
 fun checkStrongMatch(rndNum: Int, userNum: Int): Int {
     var rnd = rndNum
     var usr = userNum
-    var matches = 0
+    var hardMatch = 0
+    var softMatch = 0
     var round = 1
 
+    var digitsRnd = mutableListOf<Int>()
+    var digitsUsr = mutableListOf<Int>()
+
     do{
-        if(firstDigit(usr) == firstDigit(rnd)){
-            matches++
+        var fDigRnd = firstDigit(rnd)
+        var fDigUsr = firstDigit(usr)
+        if(fDigUsr == fDigRnd){
+            hardMatch++
         }
+
+        digitsRnd.add(fDigRnd)
+        digitsUsr.add(fDigUsr)
 
         rnd %= (10000 / (pow(10, round)))  //cuts the first digit each round
         usr %= (10000 / (pow(10, round)))
@@ -16,7 +25,18 @@ fun checkStrongMatch(rndNum: Int, userNum: Int): Int {
         round++
     }while(usr >= 1)
 
-    return matches;
+
+
+    digitsRnd.forEach{
+        for (i in digitsUsr) {
+            if (i == it){
+                softMatch++
+            }
+        }
+    }
+
+    println("Hardmatches: $hardMatch ____ Softmatches: $softMatch")
+    return 0
 }
 
 fun firstDigit(n: Int): Int{
