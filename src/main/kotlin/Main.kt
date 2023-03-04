@@ -1,4 +1,4 @@
-fun checkMatches(rndNum: Int, userNum: Int): Boolean{
+fun checkMatches(rndNum: Int, userNum: Int): Boolean{       //hard matches are the right digits on the right spots, soft matches only the digit is correc
     var rnd = rndNum
     var usr = userNum
     var hardMatch = 0
@@ -80,17 +80,11 @@ fun celebrate(){
         println("**************************************")
 }
 
-fun main(args: Array<String>) {
-    println("Hello World!")
-
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
-
-
+fun main() {
     var num: Int
+
     do {
-        val rnd = (0..9).shuffled().take(4).joinToString("")
+        val rnd = (0..9).shuffled().take(4).joinToString("")        //generates a random 4-digit number without the same two digits
         num = rnd.toInt()
     } while (num < 1000)
 
@@ -107,7 +101,6 @@ fun main(args: Array<String>) {
         }while(userNum < 1000)
     }while (!checkMatches(num, userNum))
 
-    println("You Won!")
     celebrate()
 
 }
