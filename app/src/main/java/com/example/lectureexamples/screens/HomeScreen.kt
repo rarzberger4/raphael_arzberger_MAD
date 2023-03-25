@@ -1,6 +1,8 @@
 package com.example.lectureexamples.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,40 +14,89 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.lectureexamples.R
 import com.example.lectureexamples.models.Movie
 import com.example.lectureexamples.models.getMovies
 
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavController) {
-    // A surface container using the 'background' color from the theme
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
-    ) {
-        Column {
-            Greeting()
-            Text(
-                style = MaterialTheme.typography.h6,
-                text= "Movie List"
-            )
-            MyList(navController)
+    var expanded by remember { mutableStateOf(false) }
+
+
+    Scaffold (
+        topBar = {
+            TopAppBar {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+
+                    Text(text = "Movies")
+
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = { expanded = true },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "DropdownMenu",
+                        )
+                    }
+                }
+
+                Row(horizontalArrangement = Arrangement.End) {
+                    DropdownMenu(expanded = expanded, onDismissRequest = {expanded = false}) {
+                        DropdownMenuItem(
+                            onClick = { }) {
+                            Text(text = "Favorites")
+                        }
+
+                    }
+                }
+            }
+
         }
-        //MyList()
-        //Greeting()
-        //WelcomeText(modifier = Modifier.padding(16.dp), text = "welcome to my app!")
+            ){
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colors.background
+        ) {
+            Column {
+                Greeting()
+                Text(
+                    style = MaterialTheme.typography.h6,
+                    text= "Movie List"
+                )
+                MyList(navController)
+            }
+            //MyList()
+            //Greeting()
+            //WelcomeText(modifier = Modifier.padding(16.dp), text = "welcome to my app!")
+        }
     }
+
 }
 
 
@@ -69,6 +120,8 @@ fun MyList(navController: NavController = rememberNavController(),
 
 @Composable
 fun MovieRow(movie: Movie, onItemClick: (String) -> Unit = {}) {
+    var expanded by remember { mutableStateOf(false) }
+
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(5.dp)
@@ -81,9 +134,12 @@ fun MovieRow(movie: Movie, onItemClick: (String) -> Unit = {}) {
                 .height(150.dp)
                 .fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.avatar2),
-                    contentDescription = "Movie Poster",
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(movie.images[0])
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "lol",
                     contentScale = ContentScale.Crop
                 )
 
@@ -105,9 +161,41 @@ fun MovieRow(movie: Movie, onItemClick: (String) -> Unit = {}) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(movie.title, style = MaterialTheme.typography.h6)
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
-                    contentDescription = "Show details")
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = {
+                        expanded = !expanded
+                    },
+                ) {
+                    if (expanded){
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowUp,
+                            contentDescription = ("Show details")
+                        )
+                    }else{
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowDown,
+                            contentDescription = ("Show details")
+                        )
+                    }
+                }
+            }
+
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+                horizontalArrangement = Arrangement.SpaceBetween){
+                if(expanded){
+                    Column() {
+                        DetailScreen(navController = rememberNavController(), movieId = "Director: ${movie.director}")
+                        DetailScreen(navController = rememberNavController(), movieId = "Released: ${movie.year}")
+                        DetailScreen(navController = rememberNavController(), movieId = "Genre: ${movie.genre}")
+                        DetailScreen(navController = rememberNavController(), movieId = "Actors: ${movie.actors}")
+                        DetailScreen(navController = rememberNavController(), movieId = "Rating: ${movie.rating}")
+                    }
+
+                }
+
             }
         }
     }
