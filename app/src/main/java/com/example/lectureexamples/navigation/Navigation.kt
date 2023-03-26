@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.lectureexamples.screens.DetailScreen
+import com.example.lectureexamples.screens.Favorites
 import com.example.lectureexamples.screens.HomeScreen
 
 @Composable
@@ -20,11 +21,22 @@ fun Navigation(){
 
         composable(
             route = "detail/{movieId}",
-            arguments = listOf(navArgument("movieId"){
+            arguments = listOf(
+                navArgument("movieId"){
                 type = NavType.StringType
-            })
+            },)
+
         ) {backStackEntry ->
-            DetailScreen(navController, movieId = backStackEntry.arguments?.getString("movieId"))
+            DetailScreen(
+                navController,
+                movieId = backStackEntry.arguments?.getString("movieId")
+            )
+        }
+
+        composable(
+            route = "favorites"
+        ){
+            Favorites(navController)
         }
     }
 }

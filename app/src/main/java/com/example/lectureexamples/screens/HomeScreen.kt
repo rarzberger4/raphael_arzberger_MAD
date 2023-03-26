@@ -2,8 +2,6 @@ package com.example.lectureexamples.screens
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,26 +11,20 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.lectureexamples.R
 import com.example.lectureexamples.models.Movie
 import com.example.lectureexamples.models.getMovies
 
@@ -68,7 +60,7 @@ fun HomeScreen(navController: NavController) {
                 Row(horizontalArrangement = Arrangement.End) {
                     DropdownMenu(expanded = expanded, onDismissRequest = {expanded = false}) {
                         DropdownMenuItem(
-                            onClick = { }) {
+                            onClick = {navController.navigate("Favorites") }) {
                             Text(text = "Favorites")
                         }
 
@@ -107,7 +99,7 @@ fun MyList(navController: NavController = rememberNavController(),
     LazyColumn{
         items(movies) {movie ->
             MovieRow(
-                movie = movie,
+                movie = movie
             )  { movieId ->
                 Log.d("MyList", "item clicked $movieId")
                 // navigate to detailscreen
@@ -187,11 +179,13 @@ fun MovieRow(movie: Movie, onItemClick: (String) -> Unit = {}) {
                 horizontalArrangement = Arrangement.SpaceBetween){
                 if(expanded){
                     Column() {
-                        DetailScreen(navController = rememberNavController(), movieId = "Director: ${movie.director}")
-                        DetailScreen(navController = rememberNavController(), movieId = "Released: ${movie.year}")
-                        DetailScreen(navController = rememberNavController(), movieId = "Genre: ${movie.genre}")
-                        DetailScreen(navController = rememberNavController(), movieId = "Actors: ${movie.actors}")
-                        DetailScreen(navController = rememberNavController(), movieId = "Rating: ${movie.rating}")
+                        //DetailScreen(navController = rememberNavController(), movieId = movie.id)
+                        Text("Title: ${movie.title}")
+                        Text("Year: ${movie.year}")
+                        Text("Rating: ${movie.rating}")
+                        Text("Genre: ${movie.genre}")
+                        Text("Director: ${movie.director}")
+
                     }
 
                 }
@@ -265,5 +259,51 @@ fun Greeting() {
         )
 
          */
+    }
+}
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Composable
+fun Favorites(navController: NavHostController) {
+    var movies = getMovies()
+
+
+    Scaffold(
+        topBar = {
+            TopAppBar {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    IconButton(
+                        modifier = Modifier.size(24.dp),
+                        onClick = { navController.navigate("home") },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowLeft,
+                            contentDescription = "Back",
+                        )
+                    }
+                    Text(text = "   Favorites")
+                }
+            }
+            }
+    ){
+        LazyColumn{
+            items(movies) {movie ->
+                if(movie.fav){
+                    MovieRow(
+                        movie = movie
+                    )  { movieId ->
+                        Log.d("MyList", "item clicked $movieId")
+                        // navigate to detailscreen
+                        navController.navigate("detail/$movieId")
+                    }
+                }
+
+            }
+        }
     }
 }
